@@ -1,16 +1,14 @@
 package ArrayType;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /*
  * 统计数组中的元素
  * */
 public class Solution03 {
     public static void main(String[] args) {
-        System.out.println(findShortestSubArray(new int[]{1, 2, 2, 3, 1}));
+        System.out.println(findDuplicates(new int[]{2, 1}));
     }
 
 
@@ -23,8 +21,7 @@ public class Solution03 {
         int[] res = new int[2];
         Arrays.sort(nums);
         int prev = 0;
-        for (int i = 0; i < n; i++) {
-            int current = nums[i];
+        for (int current : nums) {
             if (current == prev) {
                 res[0] = current;
             } else if (current - prev > 1) {
@@ -124,4 +121,69 @@ public class Solution03 {
 
         return minLen;
     }
+
+
+    //https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/
+    public static List<Integer> findDisappearedNumbers(int[] nums) {
+        /*
+         * 利用哈希表来筛选出消失的数字
+         * */
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<Integer> res = new ArrayList<>();
+        int n = nums.length;
+        for (int num : nums) {
+            map.put(num, 1);
+        }
+        for (int i = 1; i <= n; i++) {
+            if (map.get(i) == null) {
+                res.add(i);
+            }
+        }
+
+        return res;
+
+    }
+
+    public static List<Integer> findDisappearedNumbers01(int[] nums) {
+        /*
+         * 利用数组来代替哈希表
+         * */
+        int n = nums.length;
+        List<Integer> res = new ArrayList<>();
+        for (int num : nums) {
+            int x = (num - 1) % n;
+            nums[x] += n;
+
+        }
+        System.out.println(Arrays.toString(nums));
+        for (int i = 0; i < n; i++) {
+            if (nums[i] <= n) {
+                res.add(i + 1);
+            }
+        }
+
+        return res;
+    }
+
+
+    //https://leetcode.cn/problems/find-all-duplicates-in-an-array/
+    public static List<Integer> findDuplicates(int[] nums) {
+        /*
+        * 可以使用哈希表来筛选，由于题目现在，这里使用数组来代替哈希表
+        * */
+        int n = nums.length;
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int x = (nums[i] - 1) % n;
+            nums[x] += n;
+        }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 2 * n && n > 1) {
+                res.add(i + 1);
+            }
+        }
+
+        return res;
+    }
+
 }
